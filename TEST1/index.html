@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Gestión Geriátrico</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; color: #000; background: #fff; }
+        h1, h2 { color: #000; border-bottom: 1px solid #000; padding-bottom: 5px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 10px; margin-bottom: 20px; background: #fff; }
+        th, td { border: 1px solid #000; padding: 8px 10px; text-align: left; font-size: 14px; }
+        th { background-color: #fff; font-weight: bold; }
+        tr:nth-child(even) { background-color: #fff; }
+        .alerta-box { border: 1px solid #000; padding: 10px; margin-bottom: 20px; background: #fff; }
+        .search-box { margin-bottom: 15px; }
+        .search-box input { padding: 6px; width: 300px; font-size: 14px; border: 1px solid #000; }
+    </style>
+</head>
+<body>
+
+    <h1>Sistema de Gestión Geriátrico</h1>
+
+    <!-- ALERTAS -->
+    <h2>Alertas del Sistema</h2>
+    <div id="contenedorAlertas" class="alerta-box">
+        <b>Estado:</b> Conectado correctamente al servidor de Python con pyodbc y Base de Datos Neon.
+    </div>
+
+    <!-- BÚSQUEDA Y DETALLE DE RESIDENTES -->
+    <h2>Búsqueda y Vista General (Residentes Activos)</h2>
+    <div class="search-box">
+        <input type="text" id="inputBusqueda" placeholder="Buscar residente por nombre o apellido..." onkeyup="filtrarResidentes()">
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre Completo</th>
+                <th>Cama Asignada</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody id="tablaResidentes">
+            <tr><td colspan="4">Cargando residentes...</td></tr>
+        </tbody>
+    </table>
+
+    <!-- REPORTES / MEDICAMENTOS -->
+    <h2>Reportes: Medicamentos Administrados / Programados</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Frecuencia / Hora</th>
+                <th>Residente</th>
+                <th>Cama</th>
+                <th>Medicamento</th>
+                <th>Dosis</th>
+            </tr>
+        </thead>
+        <tbody id="tablaMedicamentos">
+            <tr><td colspan="5">Cargando reportes de medicamentos...</td></tr>
+        </tbody>
+    </table>
+
+    <script>
+        let listaResidentesGlobal = [];
+
+        function cargarResidentes() {
+            fetch('http://localhost:3000/api/residentes')
+                .then(res => res.json())
+                .then(data => {
+                    listaResidentesGlobal = data;
+                    mostrarResidentes(data);
+                })
+                .catch(err => {
+                    console.error('Error cargando residentes:', err);
+                    document.getElementById('tablaResidentes').innerHTML = '<tr><td colspan="4">Error al conectar con la API.</td></tr>';
+                });
+        }
+
+        function mostrarResidentes(data) {
+            const tbody = document.getElementById('tablaResidentes');
+            tbody.innerHTML = '';
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4">No se encontraron residentes.</td></tr>';
+                return;
+            }
+            data.forEach(r => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${r.id_residente}</td>
+                        <td><b>${r.nombre_persona} ${r.apellido_persona}</b></td>
+                        <td>${r.codigo_cama || 'Sin Cama'}</td>
+                        <td>${r.estado}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function filtrarResidentes() {
+            const texto = document.getElementById('inputBusqueda').value.toLowerCase();
+            const filtrados = listaResidentesGlobal.filter(r => 
+                r.nombre_persona.toLowerCase().includes(texto) || 
+                r.apellido_persona.toLowerCase().includes(texto)
+            );
+            mostrarResidentes(filtrados);
+        }
+
+        function cargarMedicamentos() {
+            fetch('http://localhost:3000/api/medicamentos-pendientes')
+                .then(res => res.json())
+                .then(data => {
+                    const tbody = document.getElementById('tablaMedicamentos');
+                    tbody.innerHTML = '';
+                    if (data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="5">No hay registros de medicamentos.</td></tr>';
+                        return;
+                    }
+                    data.forEach(m => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${m.hora_programada}</td>
+                                <td><b>${m.residente}</b></td>
+                                <td>${m.codigo_cama || 'N/A'}</td>
+                                <td>${m.medicamento}</td>
+                                <td>${m.dosis} mg</td>
+                            </tr>
+                        `;
+                    });
+                })
+                .catch(err => {
+                    console.error('Error cargando medicamentos:', err);
+                    document.getElementById('tablaMedicamentos').innerHTML = '<tr><td colspan="5">Error al conectar con la API.</td></tr>';
+                });
+        }
+
+        cargarResidentes();
+        cargarMedicamentos();
+    </script>
+
+</body>
+</html>
