@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Alertas{% endblock %}
+{% block content %}
+<div class="page-title"><p class="eyebrow">SEGUIMIENTO</p><h1>Alertas operativas</h1><p class="muted">Eventos de bitácora pendientes o con prioridad alta.</p></div>
+<div class="notice">Regla de consulta: estado diferente de “Completado” o nivel de prioridad igual o superior a 3. Son alertas operativas, no diagnósticos clínicos.</div>
+<section class="panel">
+{% for a in alertas %}<article class="alert-row"><span class="priority">P{{ a.prioridad or '—' }}</span><div class="alert-content"><strong>{{ a.tipo_evento }}</strong><p>{{ a.descripcion }}</p><small>{{ a.fecha_hora }} · Estado: {{ a.estado or 'Sin estado' }} · Piso {{ a.piso }} · Responsable: {{ a.empleado }}</small></div></article>
+{% else %}<p class="empty">No existen eventos que cumplan las reglas de alerta.</p>{% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Detalle del residente{% endblock %}
+{% block content %}
+{% if residente %}
+<div class="page-title"><p class="eyebrow">EXPEDIENTE</p><h1>{{ residente.nombre_persona }} {{ residente.apellido_persona }}</h1><p class="muted">Residente #{{ residente.id_residente }}</p></div>
+<section class="stats detail-stats">
+ <article class="stat"><span>Estado</span><strong class="small-value">{{ residente.estado }}</strong></article>
+ <article class="stat"><span>Cama</span><strong class="small-value">{{ residente.codigo_cama or 'Sin asignar' }}</strong></article>
+ <article class="stat"><span>Habitación / piso</span><strong class="small-value">{{ residente.piso or '—' }}</strong></article>
+ <article class="stat"><span>Ingreso</span><strong class="small-value">{{ residente.fecha_ingreso or '—' }}</strong></article>
+</section>
+<section class="panel"><h2>Información personal</h2><div class="info-grid"><div><small>Documento</small><b>{{ residente.numero_documento }}</b></div><div><small>Correo</small><b>{{ residente.correo or 'No registrado' }}</b></div><div><small>Responsable</small><b>{{ residente.responsable or 'No asignado' }}</b></div><div><small>Rol del responsable</small><b>{{ residente.rol_responsable or '—' }}</b></div></div></section>
+<section class="panel"><h2>Diagnósticos registrados</h2><div class="table-wrap"><table><thead><tr><th>Enfermedad</th><th>Fecha</th><th>Observaciones</th></tr></thead><tbody>{% for d in residente.diagnosticos %}<tr><td>{{ d.enfermedad }}</td><td>{{ d.fecha_diagnostico }}</td><td>{{ d.observaciones or '—' }}</td></tr>{% else %}<tr><td colspan="3" class="empty">Sin diagnósticos registrados.</td></tr>{% endfor %}</tbody></table></div></section>
+<section class="panel"><h2>Prescripciones</h2><div class="table-wrap"><table><thead><tr><th>Medicamento</th><th>Dosis</th><th>Frecuencia</th><th>Fecha</th><th>Fin</th></tr></thead><tbody>{% for m in residente.medicamentos %}<tr><td>{{ m.medicamento }}</td><td>{{ m.dosis }}</td><td>{{ m.frecuencia }}</td><td>{{ m.fecha_prescripcion }}</td><td>{{ m.fecha_fin or 'Sin fecha' }}</td></tr>{% else %}<tr><td colspan="5" class="empty">Sin prescripciones registradas.</td></tr>{% endfor %}</tbody></table></div></section>
+{% else %}<div class="panel"><h2>Residente no disponible</h2><a href="{{ url_for('residentes') }}">Volver al directorio</a></div>{% endif %}
+{% endblock %}

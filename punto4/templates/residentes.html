@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Residentes{% endblock %}
+{% block content %}
+<div class="page-title"><p class="eyebrow">DIRECTORIO</p><h1>Búsqueda de residentes</h1><p class="muted">Consulta por nombre, apellido o identificador.</p></div>
+<form class="filters" method="get"><input name="q" value="{{ q }}" placeholder="Nombre, apellido o ID"><select name="estado"><option value="">Todos los estados</option><option value="Activo" {% if estado=='Activo' %}selected{% endif %}>Activo</option><option value="Inactivo" {% if estado=='Inactivo' %}selected{% endif %}>Inactivo</option></select><button class="button" type="submit">Buscar</button><a class="button secondary" href="{{ url_for('residentes') }}">Limpiar</a></form>
+<section class="panel"><div class="table-wrap"><table><thead><tr><th>ID</th><th>Nombre</th><th>Fecha de ingreso</th><th>Cama</th><th>Piso</th><th>Estado</th><th></th></tr></thead><tbody>
+{% for r in residentes %}<tr><td>{{ r.id_residente }}</td><td class="strong">{{ r.nombre_persona }} {{ r.apellido_persona }}</td><td>{{ r.fecha_ingreso or '—' }}</td><td>{{ r.codigo_cama or 'Sin asignar' }}</td><td>{{ r.piso or '—' }}</td><td>{{ r.estado }}</td><td><a href="{{ url_for('detalle', id_residente=r.id_residente) }}">Consultar →</a></td></tr>
+{% else %}<tr><td colspan="7" class="empty">No se encontraron residentes.</td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}

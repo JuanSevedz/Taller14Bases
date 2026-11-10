@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Reportes{% endblock %}
+{% block content %}
+<div class="page-title"><p class="eyebrow">CONSULTAS</p><h1>Reporte de medicamentos</h1><p class="muted">Prescripciones registradas y última administración asociada.</p></div>
+<div class="notice">Este reporte no determina dosis pendientes ni horarios de toma; presenta únicamente los datos almacenados en el modelo.</div>
+<section class="panel"><div class="table-wrap"><table><thead><tr><th>Residente</th><th>Cama</th><th>Medicamento</th><th>Dosis indicada</th><th>Frecuencia</th><th>Prescripción</th><th>Fin</th><th>Última administración</th></tr></thead><tbody>
+{% for m in medicamentos %}<tr><td class="strong">{{ m.residente }}</td><td>{{ m.codigo_cama or '—' }}</td><td>{{ m.medicamento }}</td><td>{{ m.dosis_indicada }}</td><td>{{ m.frecuencia }}</td><td>{{ m.fecha_prescripcion }}</td><td>{{ m.fecha_fin or '—' }}</td><td>{{ m.ultima_administracion or 'Sin registro' }}</td></tr>
+{% else %}<tr><td colspan="8" class="empty">No hay prescripciones registradas.</td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}

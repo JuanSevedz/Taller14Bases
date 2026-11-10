@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Vista general{% endblock %}
+{% block content %}
+<section class="hero">
+  <div><p class="eyebrow">PANEL DE CONTROL</p><h1>Resumen institucional</h1><p class="muted">Información consultada desde la base de datos PostgreSQL.</p></div>
+  <span class="status"><i></i> Aplicación Flask</span>
+</section>
+<section class="stats">
+  <article class="stat"><span>Residentes activos</span><strong>{{ resumen.get('residentes_activos', '—') }}</strong></article>
+  <article class="stat"><span>Empleados activos</span><strong>{{ resumen.get('empleados_activos', '—') }}</strong></article>
+  <article class="stat"><span>Camas disponibles</span><strong>{{ resumen.get('camas_disponibles', '—') }}</strong></article>
+  <article class="stat"><span>Prescripciones vigentes</span><strong>{{ resumen.get('prescripciones_vigentes', '—') }}</strong></article>
+</section>
+<section class="panel">
+  <div class="section-heading"><div><p class="eyebrow">DIRECTORIO</p><h2>Residentes activos</h2></div><a class="button secondary" href="{{ url_for('residentes') }}">Ver todos</a></div>
+  <div class="table-wrap"><table><thead><tr><th>ID</th><th>Residente</th><th>Cama</th><th>Piso</th><th>Estado</th><th></th></tr></thead><tbody>
+  {% for r in residentes %}<tr><td>{{ r.id_residente }}</td><td class="strong">{{ r.nombre_persona }} {{ r.apellido_persona }}</td><td>{{ r.codigo_cama or 'Sin asignar' }}</td><td>{{ r.piso or '—' }}</td><td><span class="badge green">{{ r.estado }}</span></td><td><a href="{{ url_for('detalle', id_residente=r.id_residente) }}">Detalle →</a></td></tr>
+  {% else %}<tr><td colspan="6" class="empty">No hay residentes para mostrar.</td></tr>{% endfor %}
+  </tbody></table></div>
+</section>
+<section class="panel">
+  <div class="section-heading"><div><p class="eyebrow">SEGUIMIENTO</p><h2>Alertas operativas recientes</h2></div><a href="{{ url_for('alertas') }}">Ver alertas →</a></div>
+  {% for a in alertas %}<div class="alert-row"><span class="priority">P{{ a.prioridad or '—' }}</span><div><strong>{{ a.tipo_evento }}</strong><p>{{ a.descripcion }}</p><small>{{ a.fecha_hora }} · Habitación piso {{ a.piso }}</small></div></div>
+  {% else %}<p class="empty">No hay eventos que cumplan las reglas de alerta.</p>{% endfor %}
+</section>
+{% endblock %}
