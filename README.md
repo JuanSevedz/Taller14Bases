@@ -1,8 +1,22 @@
 # Proyecto de Bases de Datos — Sistema de Gestión Geriátrico
 
 Repositorio académico del proyecto de Bases de Datos. Contiene el script SQL del modelo, las pruebas de conexión y consulta, y una aplicación web desarrollada con Flask para consultar la información almacenada en PostgreSQL (Neon).
+## 1. Preparar la base de datos en Neon
 
-## 1. Contenido del repositorio
+Antes de ejecutar la aplicación, es necesario crear y configurar la base de datos del proyecto en Neon, utilizando el script SQL incluido en el repositorio.
+
+1. Ingresar a [Neon](https://neon.tech/) e iniciar sesión.
+2. Crear un proyecto de PostgreSQL para el sistema de gestión geriátrica, si todavía no existe.
+3. Abrir el **SQL Editor** del proyecto y seleccionar la base de datos correspondiente.
+4. Ubicar el archivo `Gerioatrico.sql`, que se encuentra en la raíz del repositorio.
+5. Abrir el archivo, copiar todo su contenido y pegarlo en el SQL Editor de Neon.
+6. Ejecutar el script y verificar que finalice correctamente, sin errores.
+
+Este procedimiento crea la estructura de la base de datos y carga la información definida en el archivo SQL. Una vez completado, la base de datos estará preparada para que la aplicación Flask pueda conectarse y realizar las consultas.
+
+**Importante:** Si la base de datos ya fue creada y el script se ejecutó correctamente, no es necesario repetir este procedimiento. Cada integrante debe configurar sus propias credenciales de conexión en el archivo `.env`, sin compartirlas ni subirlas al repositorio.
+
+## 2. Contenido del repositorio
 
 ```text
 .
@@ -25,7 +39,7 @@ Repositorio académico del proyecto de Bases de Datos. Contiene el script SQL de
 
 Los directorios `__pycache__/`, los archivos `.pyc`, el entorno virtual `.venv/` y el archivo `.env` local no deben compartirse en Git.
 
-## 2. Requisitos para probar la aplicación
+## 3. Requisitos para probar la aplicación
 
 El compañero que clone el repositorio necesita:
 
@@ -37,7 +51,7 @@ El compañero que clone el repositorio necesita:
 
 > La aplicación Flask se ejecuta desde `punto4/`. No es necesario ejecutar `main.py` para probar las pantallas web.
 
-## 3. Clonar el repositorio
+## 4. Clonar el repositorio
 
 Desde una terminal, clona el repositorio y entra a la carpeta raíz:
 
@@ -49,7 +63,7 @@ cd Taller14Bases
 
 Los siguientes pasos se ejecutan desde esta carpeta raíz, salvo cuando se indique expresamente entrar a `punto4/`. El controlador psqlODBC se instala en el sistema operativo; las dependencias Python de Flask se instalan desde `punto4/`, porque allí está `requirements.txt`.
 
-## 4. Instalar el controlador psqlODBC
+## 5. Instalar el controlador psqlODBC
 
 Este paso se puede realizar desde cualquier directorio: instala un controlador del sistema operativo, no un paquete del proyecto.
 
@@ -85,7 +99,7 @@ Si el nombre registrado es distinto, hay que ajustar el valor `Driver={...}` en 
 
 Instala la versión de psqlODBC que corresponda a la arquitectura de Python (32 o 64 bits) y comprueba en el administrador de orígenes de datos ODBC que aparezca el controlador PostgreSQL Unicode. Después configura la cadena `BD_ODBC` con el nombre exacto registrado.
 
-## 5. Preparar el entorno Python
+## 6. Preparar el entorno Python
 
 Entra a la carpeta de la aplicación:
 
@@ -117,7 +131,7 @@ pip install -r requirements.txt
 
 ```
 
-## 6. Configurar la conexión con Neon
+## 7. Configurar la conexión con Neon
 
 Dentro de `punto4/`, copia el archivo de ejemplo:
 
@@ -153,7 +167,7 @@ Consideraciones:
 * No escribas la contraseña en el código fuente, capturas de pantalla ni documentos de entrega.
 * Si el responsable de la base de datos no ha compartido las credenciales, solicítalas por un canal privado. No las publiques en el repositorio.
 
-## 7. Ejecutar la aplicación
+## 8. Ejecutar la aplicación
 
 Asegúrate de seguir dentro de `punto4/` y de tener activo el entorno virtual creado allí:
 
@@ -173,7 +187,7 @@ Para detener el servidor, regresa a la terminal y presiona `Ctrl + C`.
 
 Si abres una terminal nueva y vuelves a probar la aplicación, recuerda activar el entorno virtual y entrar a `punto4/` antes de ejecutar `python app.py`.
 
-## 8. Pruebas funcionales que debe realizar el compañero
+## 9. Pruebas funcionales que debe realizar el compañero
 
 La aplicación es de consulta. Para probarla, utiliza las opciones del menú superior:
 
@@ -194,7 +208,7 @@ Para probar el detalle, utiliza un identificador que exista en la tabla `RESIDEN
 * El reporte presenta prescripciones y la última administración registrada. No calcula dosis pendientes ni horarios de toma.
 * La cantidad de filas y los resultados dependen de los datos que estén actualmente almacenados en Neon.
 
-## 9. Solución de problemas
+## 10. Solución de problemas
 
 ### `pyodbc.InterfaceError` o no se encuentra el controlador
 
@@ -228,7 +242,7 @@ Después detén y vuelve a iniciar Flask.
 
 Revisa la terminal donde se ejecuta `python app.py`: allí se registra el error técnico. Comprueba que se esté usando la base de datos del proyecto y que el esquema y sus tablas estén creados. Un resultado vacío no necesariamente significa que Flask esté fallando; puede que no existan registros que cumplan el filtro.
 
-## 10. Seguridad y archivos ignorados por Git
+## 11. Seguridad y archivos ignorados por Git
 
 El `.gitignore` ubicado en la raíz del repositorio debe ignorar archivos locales como:
 
@@ -250,7 +264,7 @@ Esto significa que cada integrante debe crear su propio entorno virtual y su pro
 
 El archivo `.env.ejemplo` sí se versiona porque contiene únicamente valores de muestra.
 
-## 11. Arquitectura resumida
+## 12. Arquitectura resumida
 
 ```text
 Navegador (HTML/CSS)
