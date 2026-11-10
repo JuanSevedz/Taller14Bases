@@ -1,0 +1,18 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam DefaultTextAlignment center
+
+rectangle "Arquitectura del Sistema" {
+  node "NAVEGADOR WEB\nHTML + CSS · presenta las pantallas" as Browser
+  node "SERVIDOR WEB\nPython + Flask · recibe peticiones" as Server
+  node "CAPA DE DATOS\nPython (datos.py) · centraliza SQL" as DataLayer
+  node "CONTROLADOR\npsqlODBC (PostgreSQL Unicode)" as Driver
+  node "BASE DE DATOS\nPostgreSQL alojado en Neon" as Database
+}
+
+Browser --> Server : HTTP
+Server --> DataLayer : llamadas a funciones
+DataLayer --> Driver : pyodbc / ODBC
+Driver --> Database : conexión cifrada
+@enduml
